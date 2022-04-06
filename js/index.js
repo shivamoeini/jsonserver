@@ -1,8 +1,12 @@
 // javascript for index.html
 const continer = document.querySelector(".blogs");
-const renderPosts = async () => {
-  let url = "http://localhost:3000/posts";
+const serchForm = document.querySelector(".search");
 
+const renderPosts = async (term) => {
+  let url = "http://localhost:3000/posts?_sort=likes&_order=desc ";
+  if (term) {
+    url += "&q=${term}";
+  }
   const res = await fetch(url);
   const posts = await res.json();
   console.log(posts);
@@ -18,5 +22,9 @@ const renderPosts = async () => {
   });
   continer.innerHTML = template;
 };
+serchForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  renderPosts(serchForm.term.value.trim());
+});
 
 window.addEventListener("DOMContentLoaded", (e) => renderPosts());
